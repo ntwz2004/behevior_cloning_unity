@@ -1,0 +1,19 @@
+# Python Environments
+venv/
+__pycache__/
+*.pyc
+
+# AI Model Weights
+*.pth
+*.pt
+*.tflite
+
+# Datasets and Images
+dataset*/
+dagger_dataset*/
+*.jpg
+*.png
+
+# Compressed Files
+*.zip
+*.tar.gz
