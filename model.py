@@ -5,7 +5,7 @@ class NvidiaCNN(nn.Module):
     def __init__(self):
         super(NvidiaCNN, self).__init__()
         self.conv_layers = nn.Sequential(
-            # Input: [Batch, 3, 200, 240]
+            # Input: [Batch, 3, 200, 240] -> Height 200, Width 240
             nn.Conv2d(3, 24, kernel_size=5, stride=2), nn.ReLU(),
             nn.Conv2d(24, 36, kernel_size=5, stride=2), nn.ReLU(),
             nn.Conv2d(36, 48, kernel_size=5, stride=2), nn.ReLU(),
@@ -14,7 +14,7 @@ class NvidiaCNN(nn.Module):
         )
         self.linear_layers = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(64 * 8 * 13, 100), nn.ReLU(),
+            nn.Linear(64 * 18 * 23, 100), nn.ReLU(), # << แก้จุดนี้เป็น 64 * 18 * 23 (26496)
             nn.Dropout(0.5),
             nn.Linear(100, 50), nn.ReLU(),
             nn.Linear(50, 3) # Output: 3 คลาส (Forward, Left, Right)

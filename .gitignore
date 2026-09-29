@@ -17,3 +17,12 @@ dagger_dataset*/
 # Compressed Files
 *.zip
 *.tar.gz
+All Dataset/model_unity
+logs/monitor.csv
+logs/PPO_1/events.out.tfevents.1790100525.MSI.19392.0
+logs/PPO_2/events.out.tfevents.1790610935.MSI.27312.0
+logs/PPO_3/events.out.tfevents.1790648429.MSI.26732.0
+logs/PPO_4/events.out.tfevents.1790651315.MSI.4284.0
+logs/PPO_5/events.out.tfevents.1790651346.MSI.24840.0
+เอกสาร/CPE02-แบบบันทึกการดำเนินงานโครงงาน-forPublish.docx
+เอกสาร/CPE02-แบบบันทึกการดำเนินงานโครงงาน-forPublish.pdf
