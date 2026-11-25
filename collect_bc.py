@@ -3,22 +3,15 @@ import time
 import csv
 import cv2
 import keyboard
-from unity_env import UnityCarEnv
+from unity_manual_env import UnityManualCarEnv
 
-# ตั้งค่าโฟลเดอร์ให้ตรงกับโครงสร้างใหม่
 base_dataset_dir = os.path.join("All Dataset", "dataset_image_unity")
 img_dir = os.path.join(base_dataset_dir, "images")
 os.makedirs(img_dir, exist_ok=True)
 csv_path = os.path.join(base_dataset_dir, "data.csv")
 
-env = UnityCarEnv()
+env = UnityManualCarEnv()
 obs, _ = env.reset()
-
-print("========================================")
-print("เริ่มเก็บข้อมูล: เดินหน้า (↑), ถอยหลัง (↓), เลี้ยว (←/→)")
-print("[r] รีเซ็ตรถกลับจุดสตาร์ต")
-print("[q] หยุดและบันทึกข้อมูล")
-print("========================================")
 
 file_exists = os.path.exists(csv_path)
 csv_file = open(csv_path, mode='a', newline='')
@@ -83,4 +76,4 @@ finally:
     csv_file.close()
     env.close()
     cv2.destroyAllWindows()
-    print(f"\nบันทึกข้อมูลเสร็จสิ้นที่โฟลเดอร์: {base_dataset_dir}")
+    print(f"\Saved: {base_dataset_dir}")
