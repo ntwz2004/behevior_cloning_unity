@@ -14,6 +14,15 @@ public class CarAgent : MonoBehaviour
     public float turnSpeed = 90.0f;
     public Camera agentCamera;
 
+    [Header("Camera Frame (match OBS_WIDTH / OBS_HEIGHT in unity_env.py)")]
+    public int frameWidth = 120;
+    public int frameHeight = 100;
+
+    [Header("Lane Raycast (sent as dist_left, dist_right to unity_env.py)")]
+    public float maxRayDistance = 10.0f;
+    public float rayOriginHeight = 0.25f;
+    public LayerMask wallLayerMask = Physics.DefaultRaycastLayers;
+
     [Header("Route order - drag checkpoint colliders here in driving order")]
     public Collider[] checkpointOrder;
 
@@ -23,6 +32,8 @@ public class CarAgent : MonoBehaviour
 
     // 0 = safe, 1 = crash, 2 = correct checkpoint, 3 = lap complete
     private volatile int status = 0;
+    private volatile float latestDistLeft = 0f;
+    private volatile float latestDistRight = 0f;
     private int nextCheckpointIndex = 0;
 
     private volatile bool commandReceived = false;
@@ -49,9 +60,9 @@ public class CarAgent : MonoBehaviour
         startPosition = transform.position;
         startRotation = transform.rotation;
 
-        renderTexture = new RenderTexture(240, 200, 24);
+        renderTexture = new RenderTexture(frameWidth, frameHeight, 24);
         renderTexture.Create();
-        texture2D = new Texture2D(240, 200, TextureFormat.RGB24, false);
+        texture2D = new Texture2D(frameWidth, frameHeight, TextureFormat.RGB24, false);
 
         if (agentCamera == null)
             UnityEngine.Debug.LogError("[CarAgent] Assign Agent Camera in the Inspector.");
@@ -71,12 +82,14 @@ public class CarAgent : MonoBehaviour
         if (resetRequested)
         {
             ResetCar();
+            UpdateRaycasts();
             CaptureCameraFrame();
             resetRequested = false;
             resetComplete = true;
         }
         else
         {
+            UpdateRaycasts();
             CaptureCameraFrame();
         }
 
@@ -190,6 +203,23 @@ public class CarAgent : MonoBehaviour
         timeSinceLastCommand = 0f;
     }
 
+    private void UpdateRaycasts()
+    {
+        Vector3 origin = transform.position + Vector3.up * rayOriginHeight;
+
+        latestDistLeft = Physics.Raycast(
+            origin, -transform.right, out RaycastHit hitLeft, maxRayDistance, wallLayerMask
+        )
+            ? hitLeft.distance
+            : maxRayDistance;
+
+        latestDistRight = Physics.Raycast(
+            origin, transform.right, out RaycastHit hitRight, maxRayDistance, wallLayerMask
+        )
+            ? hitRight.distance
+            : maxRayDistance;
+    }
+
     private void CaptureCameraFrame()
     {
         if (agentCamera == null || renderTexture == null || texture2D == null)
@@ -205,7 +235,7 @@ public class CarAgent : MonoBehaviour
             agentCamera.targetTexture = renderTexture;
             agentCamera.Render();
             RenderTexture.active = renderTexture;
-            texture2D.ReadPixels(new Rect(0, 0, 240, 200), 0, 0);
+            texture2D.ReadPixels(new Rect(0, 0, frameWidth, frameHeight), 0, 0);
             texture2D.Apply(false);
 
             lock (frameLock)
@@ -287,9 +317,13 @@ public class CarAgent : MonoBehaviour
         }
 
         int statusToSend = status;
+        byte[] distLeftBytes = BitConverter.GetBytes(latestDistLeft);
+        byte[] distRightBytes = BitConverter.GetBytes(latestDistRight);
         byte[] frameLength = BitConverter.GetBytes(frame.Length);
 
         stream.WriteByte((byte)statusToSend);
+        stream.Write(distLeftBytes, 0, distLeftBytes.Length);
+        stream.Write(distRightBytes, 0, distRightBytes.Length);
         stream.Write(frameLength, 0, frameLength.Length);
 
         if (frame.Length > 0)

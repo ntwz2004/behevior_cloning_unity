@@ -1,0 +1,18 @@
+# Deep Learning (BC / DAgger)
+# For NVIDIA CUDA GPU support, install PyTorch with the matching CUDA wheel index, e.g.:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124
+torch>=2.6.0
+scikit-learn>=1.5.0
+
+# Reinforcement Learning (PPO + Unity Env)
+gymnasium>=1.0.0
+stable-baselines3>=2.6.0
+tensorboard>=2.18.0
+
+# Computer Vision & Numerical Computing
+numpy>=1.26.0
+opencv-python>=4.10.0
+
+# Controls & Logging
+keyboard>=0.13.5
+openpyxl>=3.1.0

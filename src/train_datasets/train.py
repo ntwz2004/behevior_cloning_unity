@@ -1,12 +1,23 @@
+import os
+import sys
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from dataset import get_data_loaders
+
+SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
+
+from train_datasets.dataset import get_data_loaders
 from model import NvidiaCNN
 
+PROJECT_DIR = os.path.abspath(os.path.join(SRC_DIR, ".."))
+
 def train_model():
-    DATA_DIR = 'dataset_5'        # โฟลเดอร์ที่เก็บรูปภาพ
-    OUTPUT_NAME = 'nvidia_model_obstecle_5_2.pth' # ชื่อไฟล์เซฟโมเดล
+    DATA_DIR = os.path.join(PROJECT_DIR, "datasets", "dataset_5")
+    BC_MODELS_DIR = os.path.join(PROJECT_DIR, "models", "bc")
+    os.makedirs(BC_MODELS_DIR, exist_ok=True)
+    OUTPUT_NAME = os.path.join(BC_MODELS_DIR, "nvidia_model_obstecle_5_2.pth")
     BATCH_SIZE = 32
     EPOCHS = 30
     LEARNING_RATE = 0.0001       
@@ -21,11 +32,11 @@ def train_model():
         
     print(f"Using device: {device}")
     
-    # โหลด Dataset (ระบุขนาดภาพ 240x200 ตรงตาม NvidiaCNN)
+    # โหลด Dataset (ระบุขนาดภาพ 120x100 ตรงตาม NvidiaCNN)
     train_loader, val_loader = get_data_loaders(
         DATA_DIR, 
-        img_width=240, 
-        img_height=200, 
+        img_width=120, 
+        img_height=100, 
         batch_size=BATCH_SIZE
     )
     

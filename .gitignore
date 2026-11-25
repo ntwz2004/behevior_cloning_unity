@@ -1,28 +1,50 @@
-# Python Environments
+# Python Environments & Bytecode
 venv/
+.venv/
+env/
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
 
-# AI Model Weights
+# AI Models & Checkpoints
+models/
 *.pth
 *.pt
+*.onnx
 *.tflite
+*.pkl
 
-# Datasets and Images
+# Datasets & Images
+datasets/
 dataset*/
 dagger_dataset*/
+images/
 *.jpg
+*.jpeg
 *.png
 
-# Compressed Files
+# Training & Evaluation Logs
+logs/
+events.out.tfevents.*
+*.xlsx
+monitor*.csv
+
+# Compressed Archives
 *.zip
 *.tar.gz
-All Dataset/model_unity
-logs/monitor.csv
-logs/PPO_1/events.out.tfevents.1790100525.MSI.19392.0
-logs/PPO_2/events.out.tfevents.1790610935.MSI.27312.0
-logs/PPO_3/events.out.tfevents.1790648429.MSI.26732.0
-logs/PPO_4/events.out.tfevents.1790651315.MSI.4284.0
-logs/PPO_5/events.out.tfevents.1790651346.MSI.24840.0
-เอกสาร/CPE02-แบบบันทึกการดำเนินงานโครงงาน-forPublish.docx
-เอกสาร/CPE02-แบบบันทึกการดำเนินงานโครงงาน-forPublish.pdf
+*.7z
+*.rar
+
+# Project Documents
+docs/project_documents/
+*.docx
+*.pdf
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

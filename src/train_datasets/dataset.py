@@ -16,7 +16,7 @@ class AutoDriveDataset(Dataset):
     def __getitem__(self, idx):
         return self.X[idx], self.y[idx]
 
-def get_data_loaders(data_dir, img_height=200, img_width=240, test_size=0.2, batch_size=32):
+def get_data_loaders(data_dir, img_height=100, img_width=120, test_size=0.2, batch_size=32):
     forward_imgs, left_imgs, right_imgs = [], [], []
     
     print("Processing images from:", data_dir)
@@ -31,7 +31,7 @@ def get_data_loaders(data_dir, img_height=200, img_width=240, test_size=0.2, bat
             if img is None: 
                 continue
             
-            # Resize ภาพ (Width 240, Height 200)
+            # Resize ภาพ (ค่าเริ่มต้น Width 120, Height 100)
             img = cv2.resize(img, (img_width, img_height))
             
             # ทำภาพต้นฉบับ
